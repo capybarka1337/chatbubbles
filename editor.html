@@ -21,12 +21,39 @@
 
         <main class="main-content">
             <div class="editor-panel">
-                <div class="messages-list">
-                    <h2>Сообщения</h2>
-                    <div id="messagesContainer" class="messages-container">
-                        <!-- Сообщения будут добавляться сюда -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="messages">Сообщения</button>
+                    <button class="tab-btn" data-tab="templates">Шаблоны</button>
+                    <button class="tab-btn" data-tab="animations">Анимации</button>
+                </div>
+
+                <div class="tab-content active" id="messages-tab">
+                    <div class="messages-list">
+                        <h2>Сообщения</h2>
+                        <div id="messageCount" class="message-count">Сообщений: 0</div>
+                        <div id="messagesContainer" class="messages-container">
+                            <!-- Сообщения будут добавляться сюда -->
+                        </div>
+                        <button id="addMessageBtn" class="btn btn-secondary">+ Добавить сообщение</button>
                     </div>
-                    <button id="addMessageBtn" class="btn btn-secondary">+ Добавить сообщение</button>
+                </div>
+
+                <div class="tab-content" id="templates-tab">
+                    <div class="templates-list">
+                        <h2>Шаблоны анимаций</h2>
+                        <div id="templatesContainer" class="templates-grid">
+                            <!-- Шаблоны будут добавляться сюда -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="animations-tab">
+                    <div class="animations-list">
+                        <h2>Глобальные настройки анимаций</h2>
+                        <div id="globalAnimationsContainer" class="global-animations-container">
+                            <!-- Глобальные настройки анимаций -->
+                        </div>
+                    </div>
                 </div>
 
                 <div class="settings-panel">

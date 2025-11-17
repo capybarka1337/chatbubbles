@@ -7,6 +7,14 @@ class ChatBubbleEditor {
         this.selectedMessageId = null;
         this.isPlaying = false;
         this.animationFrameId = null;
+        this.globalAnimationSettings = {
+            defaultType: 'fadeInUp',
+            defaultDuration: 500,
+            defaultEasing: 'cubic-bezier(0.33, 1, 0.68, 1)',
+            enableParticles: false,
+            enableGlow: false,
+            enableFloating: false
+        };
         
         this.templates = [
             {
@@ -15,8 +23,8 @@ class ChatBubbleEditor {
                 icon: '👋',
                 description: 'Простое приветствие',
                 messages: [
-                    { text: 'Привет! 👋', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
-                    { text: 'Как дела?', sender: 'other', delay: 800, duration: 500, avatar: '👤' }
+                    { text: 'Привет! 👋', sender: 'other', delay: 0, duration: 500, avatar: '👤', animation: 'bounce' },
+                    { text: 'Как дела?', sender: 'other', delay: 800, duration: 500, avatar: '👤', animation: 'fadeInUp' }
                 ]
             },
             {
@@ -97,10 +105,58 @@ class ChatBubbleEditor {
                 icon: '✅',
                 description: 'Утверждение действия',
                 messages: [
-                    { text: 'Ты уверен? 🤔', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
-                    { text: 'Да, все готово', sender: 'user', delay: 1100, duration: 500, avatar: '🧑' },
-                    { text: 'Отлично! ✨', sender: 'other', delay: 1800, duration: 600, avatar: '👤' },
-                    { text: 'Запущено! ✅', sender: 'other', delay: 2600, duration: 600, avatar: '👤' }
+                    { text: 'Ты уверен? 🤔', sender: 'other', delay: 0, duration: 500, avatar: '👤', animation: 'pulse' },
+                    { text: 'Да, все готово', sender: 'user', delay: 1100, duration: 500, avatar: '🧑', animation: 'zoom' },
+                    { text: 'Отлично! ✨', sender: 'other', delay: 1800, duration: 600, avatar: '👤', animation: 'glow' },
+                    { text: 'Запущено! ✅', sender: 'other', delay: 2600, duration: 600, avatar: '👤', animation: 'bounce' }
+                ]
+            },
+            {
+                id: 'gaming',
+                name: 'Игровой чат',
+                icon: '🎮',
+                description: 'Анимации в стиле игр',
+                messages: [
+                    { text: 'Готов к игре! 🎯', sender: 'other', delay: 0, duration: 600, avatar: '🎮', animation: 'zoom' },
+                    { text: 'Погнали! 🚀', sender: 'user', delay: 1000, duration: 500, avatar: '🎯', animation: 'elastic' },
+                    { text: 'Level Up! ⬆️', sender: 'other', delay: 1800, duration: 700, avatar: '🏆', animation: 'glow' },
+                    { text: 'NEW RECORD! 🏅', sender: 'other', delay: 2800, duration: 800, avatar: '🎖️', animation: 'particles' }
+                ]
+            },
+            {
+                id: 'tech',
+                name: 'Техно чат',
+                icon: '💻',
+                description: 'Футуристические анимации',
+                messages: [
+                    { text: 'System initialized... 🤖', sender: 'other', delay: 0, duration: 600, avatar: '🤖', animation: 'typewriter' },
+                    { text: 'Status: Online 🟢', sender: 'user', delay: 1200, duration: 500, avatar: '💻', animation: 'glitch' },
+                    { text: 'Loading complete ✅', sender: 'other', delay: 2000, duration: 600, avatar: '🤖', animation: 'morph' },
+                    { text: 'Welcome to Matrix! 🌐', sender: 'other', delay: 3000, duration: 700, avatar: '🌐', animation: 'glow' }
+                ]
+            },
+            {
+                id: 'romantic',
+                name: 'Романтический',
+                icon: '💕',
+                description: 'Нежные анимации',
+                messages: [
+                    { text: 'Привет, солнышко ☀️', sender: 'other', delay: 0, duration: 700, avatar: '💕', animation: 'pulse' },
+                    { text: 'Как ты? 🥰', sender: 'user', delay: 1500, duration: 600, avatar: '😊', animation: 'swing' },
+                    { text: 'Скучаю по тебе 💝', sender: 'other', delay: 2500, duration: 700, avatar: '💕', animation: 'float' },
+                    { text: 'Встретимся сегодня? 💑', sender: 'user', delay: 3500, duration: 600, avatar: '😊', animation: 'bounce' }
+                ]
+            },
+            {
+                id: 'business',
+                name: 'Деловой',
+                icon: '💼',
+                description: 'Профессиональные анимации',
+                messages: [
+                    { text: 'Доброе утро! ☕', sender: 'other', delay: 0, duration: 500, avatar: '💼', animation: 'slide-left' },
+                    { text: 'Готов к встрече 📅', sender: 'user', delay: 1200, duration: 500, avatar: '👔', animation: 'fade-scale' },
+                    { text: 'Проект одобрен ✅', sender: 'other', delay: 2000, duration: 600, avatar: '📊', animation: 'flip' },
+                    { text: 'Отличная работа! 🎯', sender: 'other', delay: 3000, duration: 600, avatar: '🏢', animation: 'zoom' }
                 ]
             }
         ];
@@ -108,7 +164,159 @@ class ChatBubbleEditor {
         this.initializeElements();
         this.bindEvents();
         this.renderTemplates();
+        this.renderGlobalAnimations();
         this.loadFromLocalStorage();
+    }
+
+    renderGlobalAnimations() {
+        const container = document.getElementById('globalAnimationsContainer');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="animation-preset">
+                <div class="animation-preset-header">
+                    <span class="animation-preset-name">Глобальные настройки</span>
+                    <span class="animation-preset-badge">PRO</span>
+                </div>
+                <div class="animation-preset-description">
+                    Настройки применяются ко всем новым сообщениям по умолчанию
+                </div>
+                <div class="animation-controls">
+                    <div class="setting-group">
+                        <label>Анимация по умолчанию</label>
+                        <select id="defaultAnimationType">
+                            <option value="fadeInUp">Появление снизу</option>
+                            <option value="bounce">Пружинящий</option>
+                            <option value="elastic">Эластичный</option>
+                            <option value="zoom">Масштабирование</option>
+                            <option value="rotate">Вращение</option>
+                            <option value="slide-left">Слайд слева</option>
+                            <option value="slide-right">Слайд справа</option>
+                            <option value="shake">Тряска</option>
+                            <option value="pulse">Пульсация</option>
+                            <option value="glitch">Глич</option>
+                            <option value="typewriter">Печатающая машинка</option>
+                            <option value="fade-scale">Появление + масштаб</option>
+                            <option value="flip">Переворот</option>
+                            <option value="swing">Раскачивание</option>
+                            <option value="rubber">Резиновый</option>
+                            <option value="glow">Свечение</option>
+                            <option value="morph">Морфинг</option>
+                            <option value="particles">Частицы</option>
+                            <option value="float">Плавающий</option>
+                        </select>
+                    </div>
+                    
+                    <div class="animation-control-row">
+                        <div class="animation-control-group">
+                            <label>Длительность (мс)</label>
+                            <input type="number" id="defaultDuration" value="500" min="100" max="2000" step="50">
+                        </div>
+                        
+                        <div class="animation-control-group">
+                            <label>Задержка между сообщениями</label>
+                            <input type="number" id="defaultDelay" value="500" min="0" max="2000" step="50">
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Дополнительные эффекты</label>
+                        <div class="animation-type-selector">
+                            <button class="animation-type-btn ${this.globalAnimationSettings.enableParticles ? 'active' : ''}" data-effect="particles">Частицы</button>
+                            <button class="animation-type-btn ${this.globalAnimationSettings.enableGlow ? 'active' : ''}" data-effect="glow">Свечение</button>
+                            <button class="animation-type-btn ${this.globalAnimationSettings.enableFloating ? 'active' : ''}" data-effect="floating">Плавание</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Предустановленные темы</label>
+                        <div class="animation-type-selector">
+                            <button class="animation-type-btn" data-theme="minimal">Минимализм</button>
+                            <button class="animation-type-btn" data-theme="energetic">Энергичный</button>
+                            <button class="animation-type-btn" data-theme="professional">Профессиональный</button>
+                            <button class="animation-type-btn" data-theme="playful">Игровой</button>
+                            <button class="animation-type-btn" data-theme="elegant">Элегантный</button>
+                            <button class="animation-type-btn" data-theme="tech">Техно</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Bind events for global animation settings
+        const defaultAnimationType = document.getElementById('defaultAnimationType');
+        if (defaultAnimationType) {
+            defaultAnimationType.value = this.globalAnimationSettings.defaultType;
+            defaultAnimationType.addEventListener('change', (e) => {
+                this.globalAnimationSettings.defaultType = e.target.value;
+                this.saveToLocalStorage();
+            });
+        }
+
+        const defaultDuration = document.getElementById('defaultDuration');
+        if (defaultDuration) {
+            defaultDuration.value = this.globalAnimationSettings.defaultDuration;
+            defaultDuration.addEventListener('input', (e) => {
+                this.globalAnimationSettings.defaultDuration = parseInt(e.target.value);
+                this.saveToLocalStorage();
+            });
+        }
+
+        // Bind effect buttons
+        container.querySelectorAll('[data-effect]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const effect = e.target.getAttribute('data-effect');
+                e.target.classList.toggle('active');
+                
+                switch(effect) {
+                    case 'particles':
+                        this.globalAnimationSettings.enableParticles = !this.globalAnimationSettings.enableParticles;
+                        break;
+                    case 'glow':
+                        this.globalAnimationSettings.enableGlow = !this.globalAnimationSettings.enableGlow;
+                        break;
+                    case 'floating':
+                        this.globalAnimationSettings.enableFloating = !this.globalAnimationSettings.enableFloating;
+                        break;
+                }
+                this.saveToLocalStorage();
+            });
+        });
+
+        // Bind theme buttons
+        container.querySelectorAll('[data-theme]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const theme = e.target.getAttribute('data-theme');
+                this.applyAnimationTheme(theme);
+                
+                // Update active state
+                container.querySelectorAll('[data-theme]').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+    }
+
+    applyAnimationTheme(theme) {
+        const themes = {
+            minimal: { type: 'fadeInUp', duration: 400, particles: false, glow: false, floating: false },
+            energetic: { type: 'bounce', duration: 600, particles: true, glow: false, floating: false },
+            professional: { type: 'slide-left', duration: 500, particles: false, glow: false, floating: false },
+            playful: { type: 'elastic', duration: 700, particles: true, glow: true, floating: false },
+            elegant: { type: 'fade-scale', duration: 600, particles: false, glow: true, floating: false },
+            tech: { type: 'glitch', duration: 500, particles: false, glow: true, floating: false }
+        };
+
+        const selectedTheme = themes[theme];
+        if (selectedTheme) {
+            this.globalAnimationSettings.defaultType = selectedTheme.type;
+            this.globalAnimationSettings.defaultDuration = selectedTheme.duration;
+            this.globalAnimationSettings.enableParticles = selectedTheme.particles;
+            this.globalAnimationSettings.enableGlow = selectedTheme.glow;
+            this.globalAnimationSettings.enableFloating = selectedTheme.floating;
+            
+            this.saveToLocalStorage();
+            this.renderGlobalAnimations(); // Re-render to update UI
+        }
     }
 
     initializeElements() {
@@ -175,6 +383,7 @@ class ChatBubbleEditor {
             delay: msg.delay,
             duration: msg.duration,
             avatar: msg.avatar,
+            animation: msg.animation || this.globalAnimationSettings.defaultType,
             timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
         }));
         
@@ -198,6 +407,7 @@ class ChatBubbleEditor {
             delay: 1000 + (this.messages.length * 500),
             duration: 500,
             avatar: '👤',
+            animation: this.globalAnimationSettings.defaultType,
             timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
         };
 
@@ -292,6 +502,31 @@ class ChatBubbleEditor {
                 </div>
             </div>
             
+            <div class="setting-group">
+                <label>Тип анимации</label>
+                <select id="messageAnimation">
+                    <option value="fadeInUp" ${message.animation === 'fadeInUp' ? 'selected' : ''}>Появление снизу</option>
+                    <option value="bounce" ${message.animation === 'bounce' ? 'selected' : ''}>Пружинящий</option>
+                    <option value="elastic" ${message.animation === 'elastic' ? 'selected' : ''}>Эластичный</option>
+                    <option value="zoom" ${message.animation === 'zoom' ? 'selected' : ''}>Масштабирование</option>
+                    <option value="rotate" ${message.animation === 'rotate' ? 'selected' : ''}>Вращение</option>
+                    <option value="slide-left" ${message.animation === 'slide-left' ? 'selected' : ''}>Слайд слева</option>
+                    <option value="slide-right" ${message.animation === 'slide-right' ? 'selected' : ''}>Слайд справа</option>
+                    <option value="shake" ${message.animation === 'shake' ? 'selected' : ''}>Тряска</option>
+                    <option value="pulse" ${message.animation === 'pulse' ? 'selected' : ''}>Пульсация</option>
+                    <option value="glitch" ${message.animation === 'glitch' ? 'selected' : ''}>Глич</option>
+                    <option value="typewriter" ${message.animation === 'typewriter' ? 'selected' : ''}>Печатающая машинка</option>
+                    <option value="fade-scale" ${message.animation === 'fade-scale' ? 'selected' : ''}>Появление + масштаб</option>
+                    <option value="flip" ${message.animation === 'flip' ? 'selected' : ''}>Переворот</option>
+                    <option value="swing" ${message.animation === 'swing' ? 'selected' : ''}>Раскачивание</option>
+                    <option value="rubber" ${message.animation === 'rubber' ? 'selected' : ''}>Резиновый</option>
+                    <option value="glow" ${message.animation === 'glow' ? 'selected' : ''}>Свечение</option>
+                    <option value="morph" ${message.animation === 'morph' ? 'selected' : ''}>Морфинг</option>
+                    <option value="particles" ${message.animation === 'particles' ? 'selected' : ''}>Частицы</option>
+                    <option value="float" ${message.animation === 'float' ? 'selected' : ''}>Плавающий</option>
+                </select>
+            </div>
+            
             <div class="setting-row">
                 <div class="setting-group">
                     <label>Задержка (мс)</label>
@@ -324,6 +559,12 @@ class ChatBubbleEditor {
 
         document.getElementById('messageAvatar').addEventListener('input', (e) => {
             message.avatar = e.target.value;
+            this.renderMessagesList();
+            this.saveToLocalStorage();
+        });
+
+        document.getElementById('messageAnimation').addEventListener('change', (e) => {
+            message.animation = e.target.value;
             this.renderMessagesList();
             this.saveToLocalStorage();
         });
@@ -407,7 +648,7 @@ class ChatBubbleEditor {
 
     createMessageElement(message) {
         const messageEl = document.createElement('div');
-        messageEl.className = `chat-message ${message.sender === 'user' ? 'sent' : 'received'}`;
+        messageEl.className = `chat-message ${message.sender === 'user' ? 'sent' : 'received'} animation-${message.animation || 'fadeInUp'}`;
         messageEl.style.animationDuration = `${message.duration}ms`;
         
         messageEl.innerHTML = `
@@ -553,7 +794,12 @@ class ChatBubbleEditor {
 
     saveToLocalStorage() {
         try {
-            localStorage.setItem('chatbubbles-project', JSON.stringify(this.messages));
+            const projectData = {
+                messages: this.messages,
+                globalSettings: this.globalAnimationSettings,
+                version: '2.0'
+            };
+            localStorage.setItem('chatbubbles-project', JSON.stringify(projectData));
         } catch (error) {
             console.error('Ошибка при сохранении:', error);
         }
@@ -563,9 +809,19 @@ class ChatBubbleEditor {
         try {
             const saved = localStorage.getItem('chatbubbles-project');
             if (saved) {
-                this.messages = JSON.parse(saved);
+                const projectData = JSON.parse(saved);
+                
+                // Handle legacy format (just messages)
+                if (Array.isArray(projectData)) {
+                    this.messages = projectData;
+                } else {
+                    this.messages = projectData.messages || [];
+                    this.globalAnimationSettings = projectData.globalSettings || this.globalAnimationSettings;
+                }
+                
                 this.renderMessagesList();
                 this.updateMessageCount();
+                this.renderGlobalAnimations();
             }
         } catch (error) {
             console.error('Ошибка при загрузке:', error);

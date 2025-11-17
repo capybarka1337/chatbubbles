@@ -3,163 +3,519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBubbles - Демонстрация</title>
+    <title>ChatBubbles - Демонстрация анимаций</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: "Inter", "SF Pro Display", "Segoe UI", sans-serif;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            background: #f5f5f5;
+            background: radial-gradient(circle at top left, rgba(115, 97, 255, 0.25), transparent 45%),
+                radial-gradient(circle at bottom right, rgba(152, 70, 255, 0.35), transparent 55%),
+                #080817;
+            color: #f4f6fb;
         }
         .demo-section {
-            background: white;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 2rem;
             margin: 2rem 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 28px;
+            box-shadow: 0 16px 40px -20px rgba(17, 24, 39, 0.65);
+        }
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #8f73ff;
+            text-align: center;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
         .demo-chat {
-            width: 300px;
-            height: 400px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
+            width: 100%;
+            height: 450px;
+            border-radius: 18px;
             overflow: hidden;
             margin: 1rem auto;
-            background: #f8f9fa;
+            background: linear-gradient(180deg, #0a0e27 0%, #1a1a2e 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
         .demo-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, rgba(143, 115, 255, 0.15), rgba(152, 70, 255, 0.15));
             color: white;
             padding: 1rem;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         .demo-messages {
-            padding: 1rem;
+            padding: 1.5rem;
             height: calc(100% - 60px);
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
         .demo-message {
-            margin: 0.5rem 0;
-            padding: 0.8rem;
-            border-radius: 18px;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
             max-width: 80%;
-            animation: slideIn 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
         }
         .demo-message.sent {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            margin-left: auto;
+            align-self: flex-end;
+            flex-direction: row-reverse;
         }
         .demo-message.received {
-            background: white;
-            border: 1px solid #e0e0e0;
+            align-self: flex-start;
         }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .demo-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8f73ff, #7361ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin: 0.5rem;
-            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(143, 115, 255, 0.3);
         }
-        .btn:hover {
-            transform: translateY(-2px);
+        .demo-content {
+            padding: 0.85rem 1.25rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .demo-message.sent .demo-content {
+            background: linear-gradient(135deg, #8f73ff, #7361ff);
+            color: white;
+        }
+        .demo-message.received .demo-content {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f4f6fb;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .demo-text {
+            margin-bottom: 0.25rem;
+        }
+        .demo-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* Animation Types */
+        .demo-message.animation-bounce {
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        .demo-message.animation-elastic {
+            animation: elasticIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        .demo-message.animation-zoom {
+            animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .demo-message.animation-rotate {
+            animation: rotateIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .demo-message.animation-shake {
+            animation: shakeIn 0.6s ease-in-out forwards;
+        }
+        .demo-message.animation-pulse {
+            animation: pulseIn 0.8s ease-in-out forwards;
+        }
+        .demo-message.animation-glitch {
+            animation: glitchIn 0.5s ease-in-out forwards;
+        }
+        .demo-message.animation-glow {
+            animation: glowIn 0.6s ease-in-out forwards;
+        }
+        .demo-message.animation-flip {
+            animation: flipIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+        }
+        .demo-message.animation-swing {
+            animation: swingIn 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Keyframes */
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3) translateY(100px); }
+            50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
+            70% { transform: scale(0.9) translateY(5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes elasticIn {
+            0% { opacity: 0; transform: scale(0); }
+            30% { opacity: 1; transform: scale(1.1); }
+            40% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            60% { transform: scale(0.95); }
+            70% { transform: scale(1.02); }
+            80% { transform: scale(0.98); }
+            90% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        @keyframes zoomIn {
+            0% { opacity: 0; transform: scale(0.3) translateY(50px); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes rotateIn {
+            0% { opacity: 0; transform: rotate(-180deg) scale(0.5); }
+            100% { opacity: 1; transform: rotate(0) scale(1); }
+        }
+        @keyframes shakeIn {
+            0%, 100% { opacity: 1; transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        @keyframes pulseIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes glitchIn {
+            0%, 100% { opacity: 1; transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        @keyframes glowIn {
+            0% { opacity: 0; transform: scale(0.9); box-shadow: 0 0 0 rgba(143, 115, 255, 0); }
+            50% { box-shadow: 0 0 20px rgba(143, 115, 255, 0.8); }
+            100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(143, 115, 255, 0.4); }
+        }
+        @keyframes flipIn {
+            0% { opacity: 0; transform: perspective(400px) rotateY(90deg); }
+            40% { transform: perspective(400px) rotateY(-10deg); }
+            70% { transform: perspective(400px) rotateY(10deg); }
+            100% { opacity: 1; transform: perspective(400px) rotateY(0deg); }
+        }
+        @keyframes swingIn {
+            0% { opacity: 0; transform: rotate(-45deg); transform-origin: top center; }
+            100% { opacity: 1; transform: rotate(0deg); transform-origin: top center; }
         }
     </style>
 </head>
 <body>
-    <h1>🫧 ChatBubbles - Демонстрация</h1>
-    
-    <div class="demo-section">
-        <h2>Что это?</h2>
-        <p>ChatBubbles - это веб-редактор для создания анимированных чат-сообщений. Вы можете:</p>
-        <ul>
-            <li>Создавать неограниченное количество сообщений</li>
-            <li>Настраивать время появления и анимацию</li>
-            <li>Выбирать отправителя (входящие/исходящие)</li>
-            <li>Экспортировать результат в различные форматы</li>
-        </ul>
-    </div>
+    <h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 2rem; color: #8f73ff;">
+        🎬 ChatBubbles - Демонстрация анимаций
+    </h1>
 
     <div class="demo-section">
-        <h2>Пример анимации</h2>
-        <div class="demo-chat">
-            <div class="demo-header">💬 Чат-демонстрация</div>
-            <div class="demo-messages" id="demoMessages">
-                <!-- Сообщения будут добавлены через JavaScript -->
+        <h2 class="demo-title">💬 Базовые анимации</h2>
+        <div class="demo-grid">
+            <div class="demo-chat">
+                <div class="demo-header">Пружинящий (Bounce)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-bounce" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">👋</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Привет!</div>
+                            <div class="demo-time">09:41</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-bounce" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">😊</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Как дела?</div>
+                            <div class="demo-time">09:41</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Эластичный (Elastic)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-elastic" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🎉</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Супер!</div>
+                            <div class="demo-time">10:15</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-elastic" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">🚀</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Погнали!</div>
+                            <div class="demo-time">10:16</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Масштабирование (Zoom)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-zoom" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">⭐</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Вау!</div>
+                            <div class="demo-time">14:20</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-zoom" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">✨</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Круто!</div>
+                            <div class="demo-time">14:21</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div style="text-align: center;">
-            <button class="btn" onclick="playDemo()">▶️ Воспроизвести демо</button>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">🎭 Динамические анимации</h2>
+        <div class="demo-grid">
+            <div class="demo-chat">
+                <div class="demo-header">Вращение (Rotate)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-rotate" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🔄</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Крутимся!</div>
+                            <div class="demo-time">11:30</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-rotate" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">🌪️</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Вертолет!</div>
+                            <div class="demo-time">11:31</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Тряска (Shake)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-shake" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">📳</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Трясём!</div>
+                            <div class="demo-time">15:45</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-shake" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">🎮</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Вибрация!</div>
+                            <div class="demo-time">15:46</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Пульсация (Pulse)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-pulse" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">💗</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Сердечко</div>
+                            <div class="demo-time">16:00</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-pulse" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">❤️</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Люблю!</div>
+                            <div class="demo-time">16:01</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="demo-section">
-        <h2>Попробуйте сами!</h2>
-        <p style="text-align: center;">
-            <a href="editor.html" class="btn">🚀 Открыть редактор</a>
-        </p>
-        <p>В редакторе вы сможете:</p>
-        <ul>
-            <li>Добавлять и удалять сообщения</li>
-            <li>Изменять текст, аватары и время</li>
-            <li>Настраивать задержки между сообщениями</li>
-            <li>Сохранять проекты и экспортировать анимации</li>
-        </ul>
+        <h2 class="demo-title">✨ Специальные эффекты</h2>
+        <div class="demo-grid">
+            <div class="demo-chat">
+                <div class="demo-header">Глич (Glitch)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-glitch" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🤖</div>
+                        <div class="demo-content">
+                            <div class="demo-text">SYSTEM_ERROR</div>
+                            <div class="demo-time">404</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-glitch" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">💻</div>
+                        <div class="demo-content">
+                            <div class="demo-text">REBOOTING...</div>
+                            <div class="demo-time">404</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Свечение (Glow)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-glow" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🌟</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Сияю!</div>
+                            <div class="demo-time">12:00</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-glow" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">💫</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Блестяще!</div>
+                            <div class="demo-time">12:01</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Переворот (Flip)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-flip" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🎭</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Переворот!</div>
+                            <div class="demo-time">13:37</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-flip" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">🔄</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Вертолёт!</div>
+                            <div class="demo-time">13:38</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">🎪 Игровые анимации</h2>
+        <div class="demo-grid">
+            <div class="demo-chat">
+                <div class="demo-header">Раскачивание (Swing)</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-swing" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🎢</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Качели!</div>
+                            <div class="demo-time">17:00</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-swing" style="animation-delay: 0.4s;">
+                        <div class="demo-avatar">🎠</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Карусель!</div>
+                            <div class="demo-time">17:01</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Микс анимаций</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-bounce" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🎯</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Попал!</div>
+                            <div class="demo-time">18:30</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-elastic" style="animation-delay: 0.6s;">
+                        <div class="demo-avatar">🎪</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Цирк!</div>
+                            <div class="demo-time">18:31</div>
+                        </div>
+                    </div>
+                    <div class="demo-message received animation-glow" style="animation-delay: 1s;">
+                        <div class="demo-avatar">🎆</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Фейерверк!</div>
+                            <div class="demo-time">18:32</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-chat">
+                <div class="demo-header">Комбо</div>
+                <div class="demo-messages">
+                    <div class="demo-message received animation-zoom" style="animation-delay: 0.2s;">
+                        <div class="demo-avatar">🎬</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Экшн!</div>
+                            <div class="demo-time">20:00</div>
+                        </div>
+                    </div>
+                    <div class="demo-message sent animation-rotate" style="animation-delay: 0.5s;">
+                        <div class="demo-avatar">🎭</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Драма!</div>
+                            <div class="demo-time">20:01</div>
+                        </div>
+                    </div>
+                    <div class="demo-message received animation-pulse" style="animation-delay: 0.8s;">
+                        <div class="demo-avatar">🎪</div>
+                        <div class="demo-content">
+                            <div class="demo-text">Финал!</div>
+                            <div class="demo-time">20:02</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="editor.html" style="
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #8f73ff, #7361ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(143, 115, 255, 0.4)'" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            🚀 Попробовать в редакторе
+        </a>
     </div>
 
     <script>
-        const demoMessages = [
-            { text: "Привет! 👋", type: "sent", delay: 500 },
-            { text: "Привет! Как дела?", type: "received", delay: 1500 },
-            { text: "Отлично! Создаю крутую анимацию чата", type: "sent", delay: 2000 },
-            { text: "Выглядит интересно! Расскажи подробнее", type: "received", delay: 3000 },
-            { text: "Это ChatBubbles - редактор для создания анимированных чатов", type: "sent", delay: 4000 },
-            { text: "Вау! Классная идея! 🎉", type: "received", delay: 5000 }
-        ];
-
-        let isPlaying = false;
-
-        async function playDemo() {
-            if (isPlaying) return;
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            const messages = document.querySelectorAll('.demo-message');
             
-            isPlaying = true;
-            const container = document.getElementById('demoMessages');
-            container.innerHTML = '';
-            
-            for (const msg of demoMessages) {
-                await sleep(msg.delay);
-                
-                const messageEl = document.createElement('div');
-                messageEl.className = `demo-message ${msg.type}`;
-                messageEl.textContent = msg.text;
-                container.appendChild(messageEl);
-                container.scrollTop = container.scrollHeight;
-            }
-            
-            isPlaying = false;
-        }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, { threshold: 0.1 });
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        // Автоматически воспроизвести демо при загрузке
-        window.addEventListener('load', () => {
-            setTimeout(playDemo, 1000);
+            messages.forEach(message => {
+                message.style.animationPlayState = 'paused';
+                observer.observe(message);
+            });
         });
     </script>
 </body>
