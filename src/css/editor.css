@@ -27,12 +27,27 @@ body {
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 .header h1 {
     font-size: 1.8rem;
     background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    transition: transform 0.3s ease;
+}
+
+.logo-link:hover h1 {
+    transform: scale(1.05);
 }
 
 .controls {
@@ -436,11 +451,14 @@ body {
 }
 
 .export-option {
+    width: 100%;
     padding: 1rem;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: white;
+    text-align: left;
 }
 
 .export-option:hover {

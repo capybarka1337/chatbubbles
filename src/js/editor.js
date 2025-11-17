@@ -1,3 +1,6 @@
+import '../css/editor.css';
+import html2canvas from 'html2canvas';
+
 class ChatBubbleEditor {
     constructor() {
         this.messages = [];
@@ -72,21 +75,27 @@ class ChatBubbleEditor {
             return;
         }
 
-        this.messages.forEach((message, index) => {
+        this.messages.forEach((message) => {
             const messageEl = document.createElement('div');
             messageEl.className = `message-item ${message.id === this.selectedMessageId ? 'selected' : ''}`;
             messageEl.innerHTML = `
                 <div class="message-preview">${message.text}</div>
                 <div class="message-meta">
                     <span>${message.sender === 'user' ? 'Отправлено' : 'Получено'} • Задержка: ${message.delay}мс</span>
-                    <button class="delete-message" onclick="editor.deleteMessage('${message.id}')">Удалить</button>
+                    <button class="delete-message" type="button">Удалить</button>
                 </div>
             `;
-            messageEl.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('delete-message')) {
-                    this.selectMessage(message.id);
-                }
+
+            const deleteButton = messageEl.querySelector('.delete-message');
+            deleteButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.deleteMessage(message.id);
             });
+
+            messageEl.addEventListener('click', () => {
+                this.selectMessage(message.id);
+            });
+
             this.elements.messagesContainer.appendChild(messageEl);
         });
     }
@@ -281,27 +290,53 @@ class ChatBubbleEditor {
             <div class="export-content">
                 <h2>Экспорт анимации</h2>
                 <div class="export-options">
-                    <div class="export-option" onclick="editor.exportAsImage()">
+                    <button class="export-option" data-export="image" type="button">
                         <h3>📸 Изображение (PNG)</h3>
                         <p>Сохранить текущий кадр как изображение</p>
-                    </div>
-                    <div class="export-option" onclick="editor.exportAsGIF()">
+                    </button>
+                    <button class="export-option" data-export="gif" type="button">
                         <h3>🎬 Анимация (GIF)</h3>
                         <p>Сохранить всю анимацию как GIF файл</p>
-                    </div>
-                    <div class="export-option" onclick="editor.exportAsVideo()">
+                    </button>
+                    <button class="export-option" data-export="video" type="button">
                         <h3>📹 Видео (MP4)</h3>
                         <p>Сохранить анимацию как видео файл</p>
-                    </div>
-                    <div class="export-option" onclick="editor.exportAsJSON()">
+                    </button>
+                    <button class="export-option" data-export="json" type="button">
                         <h3>📄 Проект (JSON)</h3>
                         <p>Сохранить настройки проекта</p>
-                    </div>
+                    </button>
                 </div>
-                <button class="btn btn-secondary" onclick="this.closest('.export-modal').remove()">Отмена</button>
+                <button class="btn btn-secondary" id="closeExportModal" type="button">Отмена</button>
             </div>
         `;
         document.body.appendChild(modal);
+
+        const exportButtons = modal.querySelectorAll('.export-option');
+        exportButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const exportType = button.getAttribute('data-export');
+                switch(exportType) {
+                    case 'image':
+                        this.exportAsImage();
+                        break;
+                    case 'gif':
+                        this.exportAsGIF();
+                        break;
+                    case 'video':
+                        this.exportAsVideo();
+                        break;
+                    case 'json':
+                        this.exportAsJSON();
+                        break;
+                }
+            });
+        });
+
+        const closeButton = modal.querySelector('#closeExportModal');
+        closeButton.addEventListener('click', () => {
+            modal.remove();
+        });
         
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -312,7 +347,10 @@ class ChatBubbleEditor {
 
     async exportAsImage() {
         try {
-            document.querySelector('.export-modal').remove();
+            const exportModal = document.querySelector('.export-modal');
+            if (exportModal) {
+                exportModal.remove();
+            }
             
             // Ensure all messages are visible for screenshot
             const originalMessages = this.elements.chatMessages.innerHTML;
@@ -356,12 +394,18 @@ class ChatBubbleEditor {
 
     async exportAsGIF() {
         alert('Экспорт в GIF требует дополнительной библиотеки (gif.js). В текущей версии эта функция недоступна, но вы можете экспортировать как изображение или видео.');
-        document.querySelector('.export-modal').remove();
+        const exportModal = document.querySelector('.export-modal');
+        if (exportModal) {
+            exportModal.remove();
+        }
     }
 
     async exportAsVideo() {
         alert('Экспорт в видео требует дополнительной библиотеки (MediaRecorder API или FFmpeg.js). В текущей версии эта функция недоступна, но вы можете экспортировать как изображение.');
-        document.querySelector('.export-modal').remove();
+        const exportModal = document.querySelector('.export-modal');
+        if (exportModal) {
+            exportModal.remove();
+        }
     }
 
     exportAsJSON() {
@@ -380,7 +424,10 @@ class ChatBubbleEditor {
             a.click();
             URL.revokeObjectURL(url);
             
-            document.querySelector('.export-modal').remove();
+            const exportModal = document.querySelector('.export-modal');
+            if (exportModal) {
+                exportModal.remove();
+            }
         } catch (error) {
             console.error('Ошибка при экспорте JSON:', error);
             alert('Ошибка при экспорте проекта');
