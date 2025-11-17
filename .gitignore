@@ -1,0 +1,55 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.webm
+*.avi
+
+# Project exports
+chat-animation-*.png
+chat-animation-*.gif
+chat-animation-*.mp4
+chat-project-*.json
+
+# Temporary files
+*.tmp
+*.temp

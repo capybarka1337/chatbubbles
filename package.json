@@ -1,0 +1,23 @@
+{
+  "name": "chatbubbles",
+  "version": "1.0.0",
+  "description": "Редактор анимаций чат-сообщений с возможностью экспорта",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000",
+    "serve": "npx http-server -p 8000 -c-1"
+  },
+  "keywords": [
+    "chat",
+    "animation",
+    "editor",
+    "export",
+    "messaging"
+  ],
+  "author": "ChatBubbles Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

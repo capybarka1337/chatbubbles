@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBubbles - Редактор анимаций чатов</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>ChatBubbles</h1>
+            <div class="controls">
+                <button id="playBtn" class="btn btn-primary">▶️ Воспроизвести</button>
+                <button id="exportBtn" class="btn btn-success">💾 Экспорт</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="editor-panel">
+                <div class="messages-list">
+                    <h2>Сообщения</h2>
+                    <div id="messagesContainer" class="messages-container">
+                        <!-- Сообщения будут добавляться сюда -->
+                    </div>
+                    <button id="addMessageBtn" class="btn btn-secondary">+ Добавить сообщение</button>
+                </div>
+
+                <div class="settings-panel">
+                    <h2>Настройки сообщения</h2>
+                    <div id="settingsContainer" class="settings-container">
+                        <p class="no-selection">Выберите сообщение для редактирования</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-panel">
+                <h2>Предпросмотр</h2>
+                <div class="chat-container" id="chatPreview">
+                    <div class="chat-header">
+                        <div class="chat-info">
+                            <div class="chat-avatar">👤</div>
+                            <div class="chat-details">
+                                <div class="chat-name">Чат</div>
+                                <div class="chat-status">Онлайн</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Анимированные сообщения будут здесь -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
