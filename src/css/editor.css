@@ -228,6 +228,138 @@ body {
     gap: 1rem;
 }
 
+.templates-list h2,
+.animations-list h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* Animations Tab */
+.global-animations-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.animation-preset {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.animation-preset:hover {
+    background: rgba(143, 115, 255, 0.15);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.animation-preset.active {
+    border-color: var(--color-accent);
+    background: rgba(143, 115, 255, 0.2);
+}
+
+.animation-preset-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.animation-preset-name {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.animation-preset-badge {
+    background: var(--color-accent);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.animation-preset-description {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.animation-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.animation-control-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.animation-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.animation-control-group label {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.animation-control-group input,
+.animation-control-group select {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text);
+    font-size: 0.85rem;
+}
+
+.animation-type-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.animation-type-btn {
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.animation-type-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+}
+
+.animation-type-btn.active {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+}
+
+/* Message Count */
+.message-count {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
 .template-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--color-border);
@@ -505,6 +637,71 @@ body {
     max-width: 80%;
 }
 
+/* Enhanced Animation Types */
+.chat-message.animation-bounce {
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.chat-message.animation-elastic {
+    animation: elasticIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.chat-message.animation-zoom {
+    animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.chat-message.animation-rotate {
+    animation: rotateIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.chat-message.animation-slide-left {
+    animation: slideInLeft 0.5s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+}
+
+.chat-message.animation-slide-right {
+    animation: slideInRight 0.5s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+}
+
+.chat-message.animation-shake {
+    animation: shakeIn 0.6s ease-in-out forwards;
+}
+
+.chat-message.animation-pulse {
+    animation: pulseIn 0.8s ease-in-out forwards;
+}
+
+.chat-message.animation-glitch {
+    animation: glitchIn 0.5s ease-in-out forwards;
+}
+
+.chat-message.animation-typewriter {
+    animation: typewriterIn 0.8s ease-in-out forwards;
+}
+
+.chat-message.animation-fade-scale {
+    animation: fadeScaleIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.chat-message.animation-flip {
+    animation: flipIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+}
+
+.chat-message.animation-swing {
+    animation: swingIn 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.chat-message.animation-rubber {
+    animation: rubberIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.chat-message.animation-glow {
+    animation: glowIn 0.6s ease-in-out forwards;
+}
+
+.chat-message.animation-morph {
+    animation: morphIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
 .chat-message.received {
     align-self: flex-start;
 }
@@ -694,6 +891,345 @@ body {
 .messages-container::-webkit-scrollbar-thumb:hover,
 .chat-messages::-webkit-scrollbar-thumb:hover {
     background: rgba(143, 115, 255, 0.5);
+}
+
+/* Enhanced Animation Keyframes */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(100px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-10px);
+    }
+    70% {
+        transform: scale(0.9) translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes elasticIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    40% {
+        transform: scale(0.9);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    60% {
+        transform: scale(0.95);
+    }
+    70% {
+        transform: scale(1.02);
+    }
+    80% {
+        transform: scale(0.98);
+    }
+    90% {
+        transform: scale(1.01);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(50px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes rotateIn {
+    0% {
+        opacity: 0;
+        transform: rotate(-180deg) scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes shakeIn {
+    0%, 100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes pulseIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes glitchIn {
+    0%, 100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+}
+
+@keyframes typewriterIn {
+    0% {
+        opacity: 0;
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+@keyframes fadeScaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipIn {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
+    }
+    40% {
+        transform: perspective(400px) rotateY(-10deg);
+    }
+    70% {
+        transform: perspective(400px) rotateY(10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0deg);
+    }
+}
+
+@keyframes swingIn {
+    0% {
+        opacity: 0;
+        transform: rotate(-45deg);
+        transform-origin: top center;
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg);
+        transform-origin: top center;
+    }
+}
+
+@keyframes rubberIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    30% {
+        transform: scale(1.25, 0.75);
+    }
+    40% {
+        transform: scale(0.75, 1.25);
+    }
+    50% {
+        transform: scale(1.15, 0.85);
+    }
+    65% {
+        transform: scale(0.95, 1.05);
+    }
+    75% {
+        transform: scale(1.05, 0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes glowIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+        box-shadow: 0 0 0 rgba(143, 115, 255, 0);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(143, 115, 255, 0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(143, 115, 255, 0.4);
+    }
+}
+
+@keyframes morphIn {
+    0% {
+        opacity: 0;
+        border-radius: 50%;
+        transform: scale(0.5) rotate(180deg);
+    }
+    50% {
+        border-radius: 25%;
+        transform: scale(1.1) rotate(90deg);
+    }
+    100% {
+        opacity: 1;
+        border-radius: var(--radius-md);
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Particle Effects */
+.chat-message::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.chat-message.animation-particles::before {
+    animation: particleExplosion 0.6s ease-out forwards;
+}
+
+@keyframes particleExplosion {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(20);
+    }
+}
+
+/* Enhanced Message Bubble Effects */
+.message-text {
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-message.animation-wave .message-text::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: waveEffect 1s ease-out forwards;
+}
+
+@keyframes waveEffect {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Floating Animation for Continuous Effects */
+.chat-message.animation-float {
+    animation: floatIn 0.6s ease-out forwards, float 3s ease-in-out infinite;
+}
+
+@keyframes floatIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
 }
 
 /* Responsive */
