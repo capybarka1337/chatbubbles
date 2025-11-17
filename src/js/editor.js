@@ -8,8 +8,106 @@ class ChatBubbleEditor {
         this.isPlaying = false;
         this.animationFrameId = null;
         
+        this.templates = [
+            {
+                id: 'greeting',
+                name: 'Приветствие',
+                icon: '👋',
+                description: 'Простое приветствие',
+                messages: [
+                    { text: 'Привет! 👋', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
+                    { text: 'Как дела?', sender: 'other', delay: 800, duration: 500, avatar: '👤' }
+                ]
+            },
+            {
+                id: 'conversation',
+                name: 'Диалог',
+                icon: '💬',
+                description: 'Живой диалог',
+                messages: [
+                    { text: 'Привет! 🙌', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
+                    { text: 'Привет! 😊', sender: 'user', delay: 1200, duration: 500, avatar: '🧑' },
+                    { text: 'Как прошел твой день?', sender: 'other', delay: 1800, duration: 500, avatar: '👤' },
+                    { text: 'Отлично! 🎉', sender: 'user', delay: 2800, duration: 500, avatar: '🧑' }
+                ]
+            },
+            {
+                id: 'news',
+                name: 'Новость',
+                icon: '📰',
+                description: 'Объявление новости',
+                messages: [
+                    { text: 'Есть срочное сообщение! 🚨', sender: 'other', delay: 0, duration: 600, avatar: '📢' },
+                    { text: 'Слушаю внимательно', sender: 'user', delay: 1200, duration: 500, avatar: '🧑' },
+                    { text: 'Проект успешно завершен! 🎊', sender: 'other', delay: 1900, duration: 600, avatar: '📢' }
+                ]
+            },
+            {
+                id: 'question',
+                name: 'Вопрос-ответ',
+                icon: '❓',
+                description: 'Q&A диалог',
+                messages: [
+                    { text: 'У тебя есть минута? ⏰', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
+                    { text: 'Конечно, что-то случилось?', sender: 'user', delay: 1200, duration: 500, avatar: '🧑' },
+                    { text: 'Когда встреча в понедельник?', sender: 'other', delay: 1800, duration: 500, avatar: '👤' },
+                    { text: 'В 10:00 в офисе', sender: 'user', delay: 2800, duration: 500, avatar: '🧑' }
+                ]
+            },
+            {
+                id: 'joke',
+                name: 'Анекдот',
+                icon: '😂',
+                description: 'Смешное объявление',
+                messages: [
+                    { text: 'Слышал анекдот? 😄', sender: 'other', delay: 0, duration: 500, avatar: '🤡' },
+                    { text: 'Не слышал! 😊', sender: 'user', delay: 1100, duration: 500, avatar: '🧑' },
+                    { text: 'Сейчас расскажу...', sender: 'other', delay: 1800, duration: 400, avatar: '🤡' },
+                    { text: '...', sender: 'other', delay: 2500, duration: 400, avatar: '🤡' },
+                    { text: 'Ахахаха! 😂', sender: 'user', delay: 3200, duration: 600, avatar: '🧑' }
+                ]
+            },
+            {
+                id: 'celebration',
+                name: 'Празднование',
+                icon: '🎉',
+                description: 'Веселое торжество',
+                messages: [
+                    { text: 'Поздравляю! 🎊', sender: 'other', delay: 0, duration: 600, avatar: '🎈' },
+                    { text: 'Спасибо! 🙏', sender: 'user', delay: 1300, duration: 500, avatar: '🧑' },
+                    { text: 'Это лучший день! 🎉', sender: 'other', delay: 1900, duration: 600, avatar: '🎈' },
+                    { text: 'Давай отметим! 🍾', sender: 'user', delay: 2800, duration: 500, avatar: '🧑' }
+                ]
+            },
+            {
+                id: 'important',
+                name: 'Срочное',
+                icon: '🔴',
+                description: 'Важное уведомление',
+                messages: [
+                    { text: 'СРОЧНО! ⚠️', sender: 'other', delay: 0, duration: 700, avatar: '🚨' },
+                    { text: 'Что случилось?', sender: 'user', delay: 1300, duration: 600, avatar: '🧑' },
+                    { text: 'Нужна помощь сейчас!', sender: 'other', delay: 2000, duration: 600, avatar: '🚨' },
+                    { text: 'На что мне нужно?', sender: 'user', delay: 3000, duration: 600, avatar: '🧑' }
+                ]
+            },
+            {
+                id: 'confirmation',
+                name: 'Подтверждение',
+                icon: '✅',
+                description: 'Утверждение действия',
+                messages: [
+                    { text: 'Ты уверен? 🤔', sender: 'other', delay: 0, duration: 500, avatar: '👤' },
+                    { text: 'Да, все готово', sender: 'user', delay: 1100, duration: 500, avatar: '🧑' },
+                    { text: 'Отлично! ✨', sender: 'other', delay: 1800, duration: 600, avatar: '👤' },
+                    { text: 'Запущено! ✅', sender: 'other', delay: 2600, duration: 600, avatar: '👤' }
+                ]
+            }
+        ];
+        
         this.initializeElements();
         this.bindEvents();
+        this.renderTemplates();
         this.loadFromLocalStorage();
     }
 
@@ -20,7 +118,11 @@ class ChatBubbleEditor {
             chatMessages: document.getElementById('chatMessages'),
             addMessageBtn: document.getElementById('addMessageBtn'),
             playBtn: document.getElementById('playBtn'),
-            exportBtn: document.getElementById('exportBtn')
+            exportBtn: document.getElementById('exportBtn'),
+            templatesContainer: document.getElementById('templatesContainer'),
+            messageCount: document.getElementById('messageCount'),
+            tabBtns: document.querySelectorAll('.tab-btn'),
+            tabContents: document.querySelectorAll('.tab-content')
         };
     }
 
@@ -28,6 +130,60 @@ class ChatBubbleEditor {
         this.elements.addMessageBtn.addEventListener('click', () => this.addMessage());
         this.elements.playBtn.addEventListener('click', () => this.togglePlayback());
         this.elements.exportBtn.addEventListener('click', () => this.showExportModal());
+        
+        this.elements.tabBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tabName = e.target.getAttribute('data-tab');
+                this.switchTab(tabName);
+            });
+        });
+    }
+
+    switchTab(tabName) {
+        this.elements.tabBtns.forEach(btn => btn.classList.remove('active'));
+        this.elements.tabContents.forEach(content => content.classList.remove('active'));
+        
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+    }
+
+    renderTemplates() {
+        this.elements.templatesContainer.innerHTML = '';
+        
+        this.templates.forEach(template => {
+            const card = document.createElement('div');
+            card.className = 'template-card';
+            card.innerHTML = `
+                <div class="template-icon">${template.icon}</div>
+                <div class="template-name">${template.name}</div>
+                <div class="template-desc">${template.description}</div>
+            `;
+            
+            card.addEventListener('click', () => {
+                this.loadTemplate(template);
+            });
+            
+            this.elements.templatesContainer.appendChild(card);
+        });
+    }
+
+    loadTemplate(template) {
+        this.messages = template.messages.map(msg => ({
+            id: this.generateId(),
+            text: msg.text,
+            sender: msg.sender,
+            delay: msg.delay,
+            duration: msg.duration,
+            avatar: msg.avatar,
+            timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+        }));
+        
+        this.selectedMessageId = null;
+        this.renderMessagesList();
+        this.updateMessageCount();
+        this.saveToLocalStorage();
+        
+        this.switchTab('messages');
     }
 
     generateId() {
@@ -39,7 +195,7 @@ class ChatBubbleEditor {
             id: this.generateId(),
             text: 'Новое сообщение',
             sender: 'user',
-            delay: 1000,
+            delay: 1000 + (this.messages.length * 500),
             duration: 500,
             avatar: '👤',
             timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
@@ -48,6 +204,7 @@ class ChatBubbleEditor {
         this.messages.push(message);
         this.renderMessagesList();
         this.selectMessage(message.id);
+        this.updateMessageCount();
         this.saveToLocalStorage();
     }
 
@@ -58,6 +215,7 @@ class ChatBubbleEditor {
             this.renderSettings();
         }
         this.renderMessagesList();
+        this.updateMessageCount();
         this.saveToLocalStorage();
     }
 
@@ -67,11 +225,15 @@ class ChatBubbleEditor {
         this.renderSettings();
     }
 
+    updateMessageCount() {
+        this.elements.messageCount.textContent = `Сообщений: ${this.messages.length}`;
+    }
+
     renderMessagesList() {
         this.elements.messagesContainer.innerHTML = '';
         
         if (this.messages.length === 0) {
-            this.elements.messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Нет сообщений. Нажмите "Добавить сообщение" чтобы начать.</p>';
+            this.elements.messagesContainer.innerHTML = '<p style="text-align: center; color: var(--color-text-muted); padding: 2rem; font-size: 0.9rem;">Выберите шаблон или добавьте сообщение</p>';
             return;
         }
 
@@ -81,8 +243,8 @@ class ChatBubbleEditor {
             messageEl.innerHTML = `
                 <div class="message-preview">${message.text}</div>
                 <div class="message-meta">
-                    <span>${message.sender === 'user' ? 'Отправлено' : 'Получено'} • Задержка: ${message.delay}мс</span>
-                    <button class="delete-message" type="button">Удалить</button>
+                    <span>${message.sender === 'user' ? '📤' : '📥'} ${message.delay}мс</span>
+                    <button class="delete-message" type="button">✕</button>
                 </div>
             `;
 
@@ -126,7 +288,7 @@ class ChatBubbleEditor {
                 
                 <div class="setting-group">
                     <label>Аватар</label>
-                    <input type="text" id="messageAvatar" value="${message.avatar}" maxlength="2">
+                    <input type="text" id="messageAvatar" value="${message.avatar}" maxlength="2" placeholder="Эмодзи">
                 </div>
             </div>
             
@@ -137,7 +299,7 @@ class ChatBubbleEditor {
                 </div>
                 
                 <div class="setting-group">
-                    <label>Длительность анимации (мс)</label>
+                    <label>Длительность (мс)</label>
                     <input type="number" id="messageDuration" value="${message.duration}" min="100" max="2000" step="100">
                 </div>
             </div>
@@ -148,7 +310,6 @@ class ChatBubbleEditor {
             </div>
         `;
 
-        // Bind events for settings
         document.getElementById('messageText').addEventListener('input', (e) => {
             message.text = e.target.value;
             this.renderMessagesList();
@@ -201,29 +362,24 @@ class ChatBubbleEditor {
         this.isPlaying = true;
         this.elements.playBtn.innerHTML = '⏸️ Пауза';
         
-        // Clear chat messages
         this.elements.chatMessages.innerHTML = '';
         
-        // Add typing indicator initially
         const typingIndicator = this.createTypingIndicator();
         this.elements.chatMessages.appendChild(typingIndicator);
         
-        // Play messages with delays
         for (let i = 0; i < this.messages.length; i++) {
             if (!this.isPlaying) break;
             
             const message = this.messages[i];
             
-            // Remove typing indicator if it's the last message or before showing a message
             if (typingIndicator.parentNode) {
                 typingIndicator.remove();
             }
             
-            // Add typing indicator before each message (except first)
             if (i > 0 && i < this.messages.length) {
                 const newTypingIndicator = this.createTypingIndicator();
                 this.elements.chatMessages.appendChild(newTypingIndicator);
-                await this.sleep(500); // Brief typing animation
+                await this.sleep(500);
                 newTypingIndicator.remove();
             }
             
@@ -234,11 +390,9 @@ class ChatBubbleEditor {
             const messageEl = this.createMessageElement(message);
             this.elements.chatMessages.appendChild(messageEl);
             
-            // Scroll to bottom
             this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
         }
         
-        // Remove typing indicator if it exists
         if (typingIndicator.parentNode) {
             typingIndicator.remove();
         }
@@ -294,20 +448,12 @@ class ChatBubbleEditor {
                         <h3>📸 Изображение (PNG)</h3>
                         <p>Сохранить текущий кадр как изображение</p>
                     </button>
-                    <button class="export-option" data-export="gif" type="button">
-                        <h3>🎬 Анимация (GIF)</h3>
-                        <p>Сохранить всю анимацию как GIF файл</p>
-                    </button>
-                    <button class="export-option" data-export="video" type="button">
-                        <h3>📹 Видео (MP4)</h3>
-                        <p>Сохранить анимацию как видео файл</p>
-                    </button>
                     <button class="export-option" data-export="json" type="button">
                         <h3>📄 Проект (JSON)</h3>
                         <p>Сохранить настройки проекта</p>
                     </button>
                 </div>
-                <button class="btn btn-secondary" id="closeExportModal" type="button">Отмена</button>
+                <button class="btn btn-secondary btn-block" id="closeExportModal" type="button">Закрыть</button>
             </div>
         `;
         document.body.appendChild(modal);
@@ -319,12 +465,6 @@ class ChatBubbleEditor {
                 switch(exportType) {
                     case 'image':
                         this.exportAsImage();
-                        break;
-                    case 'gif':
-                        this.exportAsGIF();
-                        break;
-                    case 'video':
-                        this.exportAsVideo();
                         break;
                     case 'json':
                         this.exportAsJSON();
@@ -352,10 +492,8 @@ class ChatBubbleEditor {
                 exportModal.remove();
             }
             
-            // Ensure all messages are visible for screenshot
             const originalMessages = this.elements.chatMessages.innerHTML;
             
-            // Render all messages without animation
             this.elements.chatMessages.innerHTML = '';
             this.messages.forEach(message => {
                 const messageEl = this.createMessageElement(message);
@@ -364,16 +502,13 @@ class ChatBubbleEditor {
                 this.elements.chatMessages.appendChild(messageEl);
             });
             
-            // Wait for rendering
             await this.sleep(100);
             
-            // Capture screenshot
             const canvas = await html2canvas(this.elements.chatMessages, {
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#1a1a2e',
                 scale: 2
             });
             
-            // Convert to blob and download
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -382,29 +517,11 @@ class ChatBubbleEditor {
                 a.click();
                 URL.revokeObjectURL(url);
                 
-                // Restore original state
                 this.elements.chatMessages.innerHTML = originalMessages;
             });
         } catch (error) {
             console.error('Ошибка при экспорте изображения:', error);
             alert('Ошибка при экспорте изображения');
-            this.elements.chatMessages.innerHTML = originalMessages;
-        }
-    }
-
-    async exportAsGIF() {
-        alert('Экспорт в GIF требует дополнительной библиотеки (gif.js). В текущей версии эта функция недоступна, но вы можете экспортировать как изображение или видео.');
-        const exportModal = document.querySelector('.export-modal');
-        if (exportModal) {
-            exportModal.remove();
-        }
-    }
-
-    async exportAsVideo() {
-        alert('Экспорт в видео требует дополнительной библиотеки (MediaRecorder API или FFmpeg.js). В текущей версии эта функция недоступна, но вы можете экспортировать как изображение.');
-        const exportModal = document.querySelector('.export-modal');
-        if (exportModal) {
-            exportModal.remove();
         }
     }
 
@@ -448,6 +565,7 @@ class ChatBubbleEditor {
             if (saved) {
                 this.messages = JSON.parse(saved);
                 this.renderMessagesList();
+                this.updateMessageCount();
             }
         } catch (error) {
             console.error('Ошибка при загрузке:', error);
@@ -459,7 +577,6 @@ class ChatBubbleEditor {
     }
 }
 
-// Initialize the editor when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.editor = new ChatBubbleEditor();
 });
