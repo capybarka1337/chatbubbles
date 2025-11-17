@@ -2,11 +2,11 @@
   "name": "chatbubbles",
   "version": "1.0.0",
   "description": "Редактор анимаций чат-сообщений с возможностью экспорта",
-  "main": "index.html",
+  "type": "module",
   "scripts": {
-    "start": "python3 -m http.server 8000",
-    "dev": "python3 -m http.server 8000",
-    "serve": "npx http-server -p 8000 -c-1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [
     "chat",
@@ -18,6 +18,17 @@
   "author": "ChatBubbles Team",
   "license": "MIT",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "vite": "^7.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capybarka1337/chatbubbles.git"
+  },
+  "bugs": {
+    "url": "https://github.com/capybarka1337/chatbubbles/issues"
+  },
+  "homepage": "https://github.com/capybarka1337/chatbubbles#readme",
+  "dependencies": {
+    "html2canvas": "^1.4.1"
   }
 }

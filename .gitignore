@@ -29,6 +29,11 @@ pids
 # Dependency directories
 node_modules/
 
+# Build output
+dist/
+dist-ssr/
+*.local
+
 # Optional npm cache directory
 .npm
 

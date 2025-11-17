@@ -1,60 +1,319 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBubbles - Редактор анимаций чатов</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="app">
-        <header class="header">
-            <h1>ChatBubbles</h1>
-            <div class="controls">
-                <button id="playBtn" class="btn btn-primary">▶️ Воспроизвести</button>
-                <button id="exportBtn" class="btn btn-success">💾 Экспорт</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatBubbles — конструктор анимированных чат-сообщений</title>
+    <meta
+      name="description"
+      content="ChatBubbles — визуальный редактор для создания анимированных чатов. Создавайте сценарии, настраивайте тайминги и экспортируйте в PNG или JSON."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="landing-header">
+        <div class="container">
+          <div class="landing-header__inner">
+            <a class="brand" href="#hero" aria-label="ChatBubbles">
+              <span class="brand__icon">💬</span>
+              <span class="brand__title">ChatBubbles</span>
+            </a>
+            <nav class="landing-nav" aria-label="Основная навигация">
+              <button class="landing-nav__link" data-scroll="#features">Возможности</button>
+              <button class="landing-nav__link" data-scroll="#workflow">Как это работает</button>
+              <button class="landing-nav__link" data-scroll="#editor">Редактор</button>
+              <button class="landing-nav__link" data-scroll="#faq">FAQ</button>
+            </nav>
+            <div class="landing-header__actions">
+              <button class="btn btn-tertiary" data-scroll="#workflow">Обзор</button>
+              <button class="btn btn-primary" id="openEditor" type="button">
+                Начать создавать
+              </button>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
 
-        <main class="main-content">
-            <div class="editor-panel">
-                <div class="messages-list">
-                    <h2>Сообщения</h2>
-                    <div id="messagesContainer" class="messages-container">
-                        <!-- Сообщения будут добавляться сюда -->
-                    </div>
-                    <button id="addMessageBtn" class="btn btn-secondary">+ Добавить сообщение</button>
+      <main>
+        <section class="section hero" id="hero">
+          <div class="hero__background">
+            <span class="hero__orb hero__orb--one"></span>
+            <span class="hero__orb hero__orb--two"></span>
+            <span class="hero__orb hero__orb--three"></span>
+          </div>
+          <div class="container">
+            <div class="hero__inner">
+              <div class="hero__content">
+                <p class="hero__badge">Редактор чатов нового поколения</p>
+                <h1 class="hero__title">
+                  Создавайте <span class="accent">кинематографичные</span>
+                  переписки за минуты
+                </h1>
+                <p class="hero__subtitle">
+                  Превращайте сценарии переписок в живые анимации. Настраивайте тайминги,
+                  аватары, статусы и экспортируйте результат для презентаций, соцсетей и лендингов.
+                </p>
+                <div class="hero__actions">
+                  <button class="btn btn-primary btn-large" id="heroStart" type="button">
+                    🚀 Попробовать бесплатно
+                  </button>
+                  <a class="btn btn-outline btn-large" href="editor.html" target="_blank" rel="noreferrer">
+                    ▶️ Открыть демо редактор
+                  </a>
                 </div>
-
-                <div class="settings-panel">
-                    <h2>Настройки сообщения</h2>
-                    <div id="settingsContainer" class="settings-container">
-                        <p class="no-selection">Выберите сообщение для редактирования</p>
+                <dl class="metrics" aria-label="Основные показатели продукта">
+                  <div class="metrics__item">
+                    <dt>1800+</dt>
+                    <dd>Сообщений создано<br />нашими пользователями</dd>
+                  </div>
+                  <div class="metrics__item">
+                    <dt>15 сек.</dt>
+                    <dd>Среднее время запуска<br />первой анимации</dd>
+                  </div>
+                  <div class="metrics__item">
+                    <dt>0 ₽</dt>
+                    <dd>Бесплатный тариф<br />без ограничений</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="hero__preview" aria-hidden="true">
+                <div class="hero-preview__window">
+                  <div class="hero-preview__header">
+                    <span class="preview-dot preview-dot--red"></span>
+                    <span class="preview-dot preview-dot--amber"></span>
+                    <span class="preview-dot preview-dot--green"></span>
+                  </div>
+                  <div class="hero-preview__body">
+                    <div class="preview-message preview-message--incoming">
+                      <div class="preview-avatar">👩🏻‍💻</div>
+                      <div class="preview-bubble">
+                        Привет! Готова показать новую анимацию?
+                        <span class="preview-time">09:41</span>
+                      </div>
                     </div>
+                    <div class="preview-message preview-message--outgoing">
+                      <div class="preview-avatar">🧑🏼‍🎨</div>
+                      <div class="preview-bubble">
+                        Конечно! Смотри, каждое сообщение оживает ✨
+                        <span class="preview-time">09:41</span>
+                      </div>
+                    </div>
+                    <div class="preview-message preview-message--incoming">
+                      <div class="preview-avatar">👩🏻‍💼</div>
+                      <div class="preview-bubble">
+                        Вау! Это идеально для презентации.
+                        <span class="preview-time">09:42</span>
+                      </div>
+                    </div>
+                    <div class="preview-typing">
+                      <span class="typing-dot"></span>
+                      <span class="typing-dot"></span>
+                      <span class="typing-dot"></span>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
+        </section>
 
-            <div class="preview-panel">
-                <h2>Предпросмотр</h2>
-                <div class="chat-container" id="chatPreview">
-                    <div class="chat-header">
-                        <div class="chat-info">
-                            <div class="chat-avatar">👤</div>
-                            <div class="chat-details">
-                                <div class="chat-name">Чат</div>
-                                <div class="chat-status">Онлайн</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chat-messages" id="chatMessages">
-                        <!-- Анимированные сообщения будут здесь -->
-                    </div>
-                </div>
+        <section class="section features" id="features">
+          <div class="container">
+            <header class="section-heading">
+              <p class="section-heading__badge">Преимущества</p>
+              <h2 class="section-heading__title">Инструменты, которые экономят время</h2>
+              <p class="section-heading__subtitle">
+                Готовые шаблоны, живой предпросмотр и умные настройки — всё в одном окне.
+              </p>
+            </header>
+
+            <div class="features-grid">
+              <article class="feature-card">
+                <div class="feature-card__icon">⚡</div>
+                <h3 class="feature-card__title">Интуитивный редактор</h3>
+                <p class="feature-card__text">
+                  Просто добавляйте сообщения, задавайте задержку и отслеживайте хронологию
+                  истории в реальном времени.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-card__icon">🎨</div>
+                <h3 class="feature-card__title">Гибкая кастомизация</h3>
+                <p class="feature-card__text">
+                  Настраивайте текст, аватары, статус чата и цвета. Создавайте сцены, которые
+                  отражают ваш бренд.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-card__icon">👀</div>
+                <h3 class="feature-card__title">Предпросмотр анимации</h3>
+                <p class="feature-card__text">
+                  Нажмите «Воспроизвести», чтобы увидеть, как оживают сообщения. Плавные переходы
+                  и имитация переписки.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-card__icon">💾</div>
+                <h3 class="feature-card__title">Экспорт без хлопот</h3>
+                <p class="feature-card__text">
+                  Сохраняйте результат в PNG для презентаций или экспортируйте проект в JSON,
+                  чтобы вернуться позже.
+                </p>
+              </article>
             </div>
-        </main>
+          </div>
+        </section>
+
+        <section class="section workflow" id="workflow">
+          <div class="container">
+            <header class="section-heading">
+              <p class="section-heading__badge">3 шага</p>
+              <h2 class="section-heading__title">Как работает ChatBubbles</h2>
+              <p class="section-heading__subtitle">
+                Рабочий процесс спроектирован так, чтобы вы тратили время на идеи, а не на рутины.
+              </p>
+            </header>
+
+            <ol class="workflow-steps">
+              <li class="workflow-step">
+                <div class="workflow-step__number">01</div>
+                <div class="workflow-step__content">
+                  <h3>Опишите диалог</h3>
+                  <p>
+                    Добавляйте сообщения одной кнопкой, задавайте роли собеседников и тайминги.
+                    Автосохранение гарантирует, что вы ничего не потеряете.
+                  </p>
+                </div>
+              </li>
+              <li class="workflow-step">
+                <div class="workflow-step__number">02</div>
+                <div class="workflow-step__content">
+                  <h3>Настройте визуал</h3>
+                  <p>
+                    Изменяйте аватары, цвета и статус чата. Интерактивный предпросмотр помогает
+                    мгновенно увидеть результат.
+                  </p>
+                </div>
+              </li>
+              <li class="workflow-step">
+                <div class="workflow-step__number">03</div>
+                <div class="workflow-step__content">
+                  <h3>Экспортируйте результат</h3>
+                  <p>
+                    Скачивайте анимацию в PNG или сохраняйте проект в JSON, чтобы поделиться с командой.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="section editor-preview" id="editor">
+          <div class="container">
+            <div class="editor-preview__intro">
+              <h2>Редактор в браузере — без установки</h2>
+              <p>
+                Снизу — тот же интерфейс, который будет доступен в полной версии. Попробуйте прямо сейчас,
+                добавьте несколько сообщений и посмотрите, как всё работает.
+              </p>
+              <div class="editor-preview__actions">
+                <button class="btn btn-secondary" id="openEditorFromPreview" type="button">
+                  Открыть полный редактор
+                </button>
+                <a class="btn btn-outline" href="demo.html" target="_blank" rel="noreferrer">
+                  Посмотреть пример проекта
+                </a>
+              </div>
+            </div>
+            <iframe
+              class="editor-preview__iframe"
+              src="editor.html"
+              title="Предпросмотр редактора ChatBubbles"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </section>
+
+        <section class="section faq" id="faq">
+          <div class="container">
+            <header class="section-heading">
+              <p class="section-heading__badge">FAQ</p>
+              <h2 class="section-heading__title">Ответы на популярные вопросы</h2>
+            </header>
+            <div class="faq-grid">
+              <article class="faq-item">
+                <h3>Нужно ли что-то устанавливать?</h3>
+                <p>
+                  Нет. ChatBubbles работает прямо в браузере. Все проекты хранятся локально и доступны даже
+                  без интернета.
+                </p>
+              </article>
+              <article class="faq-item">
+                <h3>Какой формат экспорта поддерживается?</h3>
+                <p>
+                  Сейчас доступны PNG и JSON. Экспорт в GIF и MP4 появится в Pro-плане — мы уже работаем над этим.
+                </p>
+              </article>
+              <article class="faq-item">
+                <h3>Можно ли поделиться проектом с командой?</h3>
+                <p>
+                  Экспортируйте настройки в JSON и отправьте коллегам. Они смогут импортировать файл и продолжить работу.
+                </p>
+              </article>
+              <article class="faq-item">
+                <h3>Сколько это стоит?</h3>
+                <p>
+                  Базовый функционал бесплатен. Работайте без лимитов и регистрации. Премиальные функции появятся позже.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container footer__inner">
+          <div class="footer__brand">
+            <a class="brand" href="#hero">
+              <span class="brand__icon">💬</span>
+              <span class="brand__title">ChatBubbles</span>
+            </a>
+            <p>
+              Создавайте анимации переписок для презентаций, обучения, промо и контента в социальных сетях.
+            </p>
+          </div>
+          <div class="footer__links">
+            <div>
+              <h4>Продукт</h4>
+              <a href="#features">Возможности</a>
+              <a href="#workflow">Как это работает</a>
+              <a href="editor.html">Редактор</a>
+            </div>
+            <div>
+              <h4>Ресурсы</h4>
+              <a href="demo.html" target="_blank" rel="noreferrer">Демо-сценарий</a>
+              <a href="#faq">FAQ</a>
+              <a href="mailto:hello@chatbubbles.app">Написать нам</a>
+            </div>
+            <div>
+              <h4>Следите за нами</h4>
+              <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://t.me" target="_blank" rel="noreferrer">Telegram</a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer">X (Twitter)</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <div class="container">
+            <p>© 2024 ChatBubbles. Все права защищены.</p>
+          </div>
+        </div>
+      </footer>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="app.js"></script>
-</body>
+  </body>
 </html>
